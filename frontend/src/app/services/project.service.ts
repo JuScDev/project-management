@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Project } from '../models/project.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,23 +11,23 @@ export class ProjectService {
 
   private _http = inject(HttpClient);
 
-  public getProjects(): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl);
+  public getProjects(): Observable<Array<Project>> {
+    return this._http.get<Array<Project>>(this.apiUrl);
   }
 
-  public getProjectById(id: number): Observable<any> {
-    return this._http.get<any>(`${this.apiUrl}/${id}`);
+  public getProjectById(id: number): Observable<Project> {
+    return this._http.get<Project>(`${this.apiUrl}/${id}`);
   }
 
-  public createProject(project: any): Observable<any> {
-    return this._http.post<any>(this.apiUrl, project);
+  public createProject(project: Project): Observable<Project> {
+    return this._http.post<Project>(this.apiUrl, project);
   }
 
-  public updateProject(id: number, project: any): Observable<any> {
-    return this._http.put<any>(`${this.apiUrl}/${id}`, project);
+  public updateProject(id: number, project: Project): Observable<Project> {
+    return this._http.put<Project>(`${this.apiUrl}/${id}`, project);
   }
 
-  public deleteProject(id: number): Observable<any> {
-    return this._http.delete<any>(`${this.apiUrl}/${id}`);
+  public deleteProject(id: number): Observable<void> {
+    return this._http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
