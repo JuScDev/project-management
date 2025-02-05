@@ -89,30 +89,28 @@ public class ProjectsControllerTests
     public async Task GetProjectById_ShouldReturnNotFound_WhenProjectDoesNotExist()
     {
         // Arrange
-        _projectServiceMock
-            .Setup(service => service.GetProjectByIdAsync(1))
-            .ReturnsAsync((Project?)null);
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync((Project?)null);
 
         // Act
         var result = await _projectsController.GetProjectById(1);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(result.Result);
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal("Project not found.", notFoundResult.Value);
     }
 
     [Fact]
     public async Task CreateProject_ShouldReturnCreated_WhenProjectIsSuccessfullyCreated()
     {
         // Arrange
-        var newProject = new Project { Name = "New Project", Description = "Test Desc", Owner = "testuser" };
+        var project = new Project { Name = "New Project", Description = "Test Desc", Owner = "testuser" };
         var createdProject = new Project { Id = 1, Name = "New Project", Description = "Test Desc", Owner = "testuser" };
 
-        _projectServiceMock
-            .Setup(service => service.CreateProjectAsync(It.IsAny<Project>(), "testuser"))
+        _projectServiceMock.Setup(s => s.CreateProjectAsync(It.IsAny<Project>(), "testuser"))
             .ReturnsAsync(createdProject);
 
         // Act
-        var result = await _projectsController.CreateProject(newProject);
+        var result = await _projectsController.CreateProject(project);
 
         // Assert
         var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
@@ -146,30 +144,25 @@ public class ProjectsControllerTests
     public async Task UpdateProject_ShouldReturnNotFound_WhenProjectDoesNotExist()
     {
         // Arrange
-        _projectServiceMock
-            .Setup(service => service.GetProjectByIdAsync(1))
-            .ReturnsAsync((Project?)null);
+        var updatedProject = new Project { Name = "Updated Name", Description = "Updated Desc" };
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync((Project?)null);
 
         // Act
-        var result = await _projectsController.UpdateProject(1, new Project());
+        var result = await _projectsController.UpdateProject(1, updatedProject);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(result);
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Project not found.", notFoundResult.Value);
     }
 
     [Fact]
     public async Task DeleteProject_ShouldReturnNoContent_WhenDeletionIsSuccessful()
     {
         // Arrange
-        var existingProject = new Project { Id = 1, Name = "Test Project", Owner = "testuser" };
+        var project = new Project { Id = 1, Name = "Test Project", Owner = "testuser" };
 
-        _projectServiceMock
-            .Setup(service => service.GetProjectByIdAsync(1))
-            .ReturnsAsync(existingProject);
-
-        _projectServiceMock
-            .Setup(service => service.DeleteProjectAsync(1))
-            .ReturnsAsync(true);
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync(project);
+        _projectServiceMock.Setup(s => s.DeleteProjectAsync(1)).ReturnsAsync(true);
 
         // Act
         var result = await _projectsController.DeleteProject(1);
@@ -191,5 +184,64 @@ public class ProjectsControllerTests
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task GetProjects_ShouldReturnUnauthorized_WhenUserIsNotLoggedIn()
+    {
+        // Arrange
+        _projectsController.ControllerContext.HttpContext.User = new ClaimsPrincipal(); // No user
+
+        // Act
+        var result = await _projectsController.GetProjects();
+
+        // Assert
+        var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result.Result);
+        Assert.Equal("No user is currently logged in.", unauthorizedResult.Value);
+    }
+
+    [Fact]
+    public async Task GetProjectById_ShouldReturnForbid_WhenUserIsNotOwner()
+    {
+        // Arrange
+        var project = new Project { Id = 1, Name = "Project", Owner = "otherUser" };
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync(project);
+
+        // Act
+        var result = await _projectsController.GetProjectById(1);
+
+        // Assert
+        var forbidResult = Assert.IsType<ForbidResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateProject_ShouldReturnForbid_WhenUserIsNotOwner()
+    {
+        // Arrange
+        var project = new Project { Id = 1, Name = "Project", Owner = "otherUser" };
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync(project);
+
+        var updatedProject = new Project { Name = "Updated Project", Description = "Updated Desc" };
+
+        // Act
+        var result = await _projectsController.UpdateProject(1, updatedProject);
+
+        // Assert
+        var forbidResult = Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteProject_ShouldReturnNotFound_WhenUserIsNotOwner()
+    {
+        // Arrange
+        var project = new Project { Id = 1, Name = "Project", Owner = "otherUser" };
+        _projectServiceMock.Setup(s => s.GetProjectByIdAsync(1)).ReturnsAsync(project);
+
+        // Act
+        var result = await _projectsController.DeleteProject(1);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Project not found or access denied.", notFoundResult.Value);
     }
 }

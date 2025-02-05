@@ -49,9 +49,14 @@ public class ProjectsController : ControllerBase
         }
 
         var project = await _projectService.GetProjectByIdAsync(id);
-        if (project == null || project.Owner != username)
+        if (project == null)
         {
-            return NotFound("Project not found or access denied.");
+            return NotFound("Project not found.");
+        }
+
+        if (project.Owner != username)
+        {
+            return Forbid("You do not have permission to load this project.");
         }
 
         return Ok(project);
@@ -91,9 +96,14 @@ public class ProjectsController : ControllerBase
         }
 
         var existingProject = await _projectService.GetProjectByIdAsync(id);
-        if (existingProject == null || existingProject.Owner != username)
+        if (existingProject == null)
         {
-            return NotFound("Project not found or access denied.");
+            return NotFound("Project not found.");
+        }
+
+        if (existingProject.Owner != username)
+        {
+            return Forbid("You do not have permission to delete this project.");
         }
 
         await _projectService.UpdateProjectAsync(id, project);
