@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagementAPI.Data;
+using ProjectManagementAPI.Repositories;
 using ProjectManagementAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -102,6 +103,11 @@ builder.Services.Configure<IpRateLimitOptions>(options =>
 });
 builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>();
 
+// Register repositories
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+// Register services
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 

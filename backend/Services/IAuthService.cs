@@ -1,5 +1,4 @@
 using ProjectManagementAPI.Models;
-using System.Threading.Tasks;
 
 namespace ProjectManagementAPI.Services
 {

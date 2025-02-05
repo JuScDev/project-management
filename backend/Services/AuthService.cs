@@ -1,33 +1,28 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ProjectManagementAPI.Data;
 using ProjectManagementAPI.Models;
-using System;
-using System.Collections.Generic;
+using ProjectManagementAPI.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectManagementAPI.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
-        private readonly ProjectDbContext _context;
+        private readonly IAuthRepository _authRepository;
 
-        public AuthService(IConfiguration config, ProjectDbContext context)
+        public AuthService(IConfiguration config, IAuthRepository authRepository)
         {
             _config = config;
-            _context = context;
+            _authRepository = authRepository;
         }
 
         /// <inheritdoc/>
         public async Task<AuthResponse?> LoginAsync(LoginRequest request, string? ipAddress, string? device)
         {
-            var dbUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == request.Username);
+            var dbUser = await _authRepository.GetUserByUsernameAsync(request.Username);
 
             if (dbUser == null || !VerifyPassword(request.Password, dbUser.PasswordHash))
             {
@@ -37,7 +32,7 @@ namespace ProjectManagementAPI.Services
             var accessToken = GenerateJwtToken(dbUser.Username);
             var refreshToken = GenerateRefreshToken();
 
-            _context.RefreshTokens.Add(new RefreshToken
+            await _authRepository.AddRefreshTokenAsync(new RefreshToken
             {
                 Token = refreshToken,
                 Username = dbUser.Username,
@@ -46,14 +41,13 @@ namespace ProjectManagementAPI.Services
                 Device = device
             });
 
-            await _context.SaveChangesAsync();
             return new AuthResponse { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
         /// <inheritdoc/>
         public async Task<bool> RegisterAsync(RegisterRequest request)
         {
-            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+            if (await _authRepository.GetUserByUsernameAsync(request.Username) != null)
             {
                 return false;
             }
@@ -64,16 +58,14 @@ namespace ProjectManagementAPI.Services
                 PasswordHash = HashPassword(request.Password)
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _authRepository.AddUserAsync(user);
             return true;
         }
 
         /// <inheritdoc/>
         public async Task<AuthResponse?> RefreshTokenAsync(RefreshRequest request)
         {
-            var storedToken = await _context.RefreshTokens
-                .SingleOrDefaultAsync(rt => rt.Token == request.RefreshToken);
+            var storedToken = await _authRepository.GetRefreshTokenAsync(request.RefreshToken);
 
             if (storedToken == null || storedToken.ExpiryDate < DateTime.UtcNow)
             {
@@ -83,31 +75,28 @@ namespace ProjectManagementAPI.Services
             var newAccessToken = GenerateJwtToken(storedToken.Username);
             var newRefreshToken = GenerateRefreshToken();
 
-            _context.RefreshTokens.Remove(storedToken);
-            _context.RefreshTokens.Add(new RefreshToken
+            await _authRepository.RemoveRefreshTokenAsync(storedToken);
+            await _authRepository.AddRefreshTokenAsync(new RefreshToken
             {
                 Token = newRefreshToken,
                 Username = storedToken.Username,
                 ExpiryDate = DateTime.UtcNow.AddDays(7)
             });
 
-            await _context.SaveChangesAsync();
             return new AuthResponse { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
         }
 
         /// <inheritdoc/>
         public async Task<bool> LogoutAsync(LogoutRequest request)
         {
-            var storedToken = await _context.RefreshTokens
-                .SingleOrDefaultAsync(rt => rt.Token == request.RefreshToken);
+            var storedToken = await _authRepository.GetRefreshTokenAsync(request.RefreshToken);
 
             if (storedToken == null)
             {
                 return false;
             }
 
-            _context.RefreshTokens.Remove(storedToken);
-            await _context.SaveChangesAsync();
+            await _authRepository.RemoveRefreshTokenAsync(storedToken);
             return true;
         }
 
