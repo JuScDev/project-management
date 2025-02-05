@@ -1,0 +1,22 @@
+# SQLite Files
+projectmanagement.db
+projectmanagement.db-shm
+projectmanagement.db-wal
+
+# Build- and Compile-Files
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.so
+*.dylib
+*.o
+*.a
+*.out
+
+# .NET Temporary & Debugging Files
+*.AssemblyAttributes.cs
+*.deps.json
+*.runtimeconfig.json
+*.log
