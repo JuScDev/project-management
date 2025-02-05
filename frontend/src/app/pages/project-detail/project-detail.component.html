@@ -1,0 +1,21 @@
+<div class="project-detail">
+  <h2>Edit Project</h2>
+
+  <form (submit)="updateProject()">
+    <input
+      type="text"
+      placeholder="project name"
+      [(ngModel)]="project.name"
+      required
+    />
+    <input
+      type="text"
+      placeholder="description"
+      [(ngModel)]="project.description"
+      required
+    />
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <button (click)="router.navigate(['/dashboard'])">Back</button>
+</div>

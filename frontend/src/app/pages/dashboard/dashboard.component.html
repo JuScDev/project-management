@@ -1,8 +1,31 @@
 <div class="dashboard">
-  <h2>Meine Projekte</h2>
+  <h2>My projects</h2>
+
+  <form (submit)="createProject()">
+    <input
+      type="text"
+      placeholder="project name"
+      [(ngModel)]="newProject.name"
+      name="project-name"
+      required
+    />
+    <input
+      type="text"
+      placeholder="description"
+      [(ngModel)]="newProject.description"
+      name="project-description"
+      required
+    />
+    <button type="submit">Create project</button>
+  </form>
+
   <ul>
-    @for(project of projects; track project.name) {
-    <li>{{ project.name }} - {{ project.description }}</li>
+    @for(project of projects; track project.id) {
+    <li>
+      <span>{{ project.name }} - {{ project.description }}</span>
+      <button (click)="deleteProject(project.id)">Delete</button>
+      <a [routerLink]="['/project-detail', project.id]">Edit</a>
+    </li>
     }
   </ul>
 </div>

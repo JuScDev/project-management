@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthTokens } from '../models/auth.models';
@@ -9,10 +9,10 @@ import { AuthTokens } from '../models/auth.models';
 export class AuthService {
   private apiUrl = 'https://localhost:5001/api/auth';
 
-  constructor(private http: HttpClient) {}
+  private _http = inject(HttpClient);
 
   public login(username: string, password: string): Observable<AuthTokens> {
-    return this.http
+    return this._http
       .post<AuthTokens>(`${this.apiUrl}/login`, { username, password })
       .pipe(tap((tokens) => this._storeTokens(tokens)));
   }
@@ -21,7 +21,7 @@ export class AuthService {
     const refreshToken = this.getRefreshToken();
 
     if (refreshToken) {
-      this.http.post(`${this.apiUrl}/logout`, { refreshToken }).subscribe();
+      this._http.post(`${this.apiUrl}/logout`, { refreshToken }).subscribe();
     }
 
     localStorage.removeItem('accessToken');
@@ -39,7 +39,7 @@ export class AuthService {
   public refreshToken(): Observable<AuthTokens> {
     const refreshToken = this.getRefreshToken();
 
-    return this.http
+    return this._http
       .post<AuthTokens>(`${this.apiUrl}/refresh`, { refreshToken })
       .pipe(tap((tokens) => this._storeTokens(tokens)));
   }

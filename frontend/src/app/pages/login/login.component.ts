@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,16 +10,20 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule],
 })
 export class LoginComponent {
-  username = '';
-  password = '';
-  errorMessage = '';
+  public username = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  public password = '';
 
-  login(): void {
-    this.authService.login(this.username, this.password).subscribe({
+  public errorMessage = '';
+
+  private _authService = inject(AuthService);
+
+  private _router = inject(Router);
+
+  public login(): void {
+    this._authService.login(this.username, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']); // Redirect to dashboard
+        this._router.navigate(['/dashboard']);
       },
       error: () => {
         this.errorMessage =

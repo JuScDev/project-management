@@ -4,7 +4,7 @@ import {
   HttpHandler,
   HttpRequest,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
@@ -14,7 +14,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthInterceptor {
   private _isRefreshing = false;
 
-  constructor(private _authService: AuthService) {}
+  private _authService = inject(AuthService);
 
   public intercept(
     req: HttpRequest<any>,

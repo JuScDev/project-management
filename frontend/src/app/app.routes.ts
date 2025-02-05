@@ -15,5 +15,13 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'project-detail/:id',
+    loadComponent: () =>
+      import('./pages/project-detail/project-detail.component').then(
+        (x) => x.ProjectDetailComponent
+      ),
+    canActivate: [AuthGuard],
+  },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
