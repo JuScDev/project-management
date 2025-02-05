@@ -146,3 +146,14 @@
 /Users/julianscheiner/Repositorys/project-management/backend/obj/Debug/net9.0/backend.pdb
 /Users/julianscheiner/Repositorys/project-management/backend/obj/Debug/net9.0/backend.genruntimeconfig.cache
 /Users/julianscheiner/Repositorys/project-management/backend/obj/Debug/net9.0/ref/backend.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/julianscheiner/Repositorys/project-management/backend/obj/Debug/net9.0/backend.sourcelink.json
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/AspNetCoreRateLimit.dll
+/Users/julianscheiner/Repositorys/project-management/backend/bin/Debug/net9.0/Newtonsoft.Json.dll
