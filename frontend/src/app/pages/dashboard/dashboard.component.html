@@ -1,0 +1,8 @@
+<div class="dashboard">
+  <h2>Meine Projekte</h2>
+  <ul>
+    @for(project of projects; track project.name) {
+    <li>{{ project.name }} - {{ project.description }}</li>
+    }
+  </ul>
+</div>
