@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectManagementAPI.Data;
+using ProjectManagementAPI.Services;
 using ProjectManagementAPI.Models;
 
 namespace ProjectManagementAPI.Controllers;
@@ -11,13 +10,17 @@ namespace ProjectManagementAPI.Controllers;
 [ApiController]
 public class ProjectsController : ControllerBase
 {
-    private readonly ProjectDbContext _context;
+    private readonly IProjectService _projectService;
 
-    public ProjectsController(ProjectDbContext context)
+    public ProjectsController(IProjectService projectService)
     {
-        _context = context;
+        _projectService = projectService;
     }
 
+    /// <summary>
+    /// Retrieves projects owned by the currently logged-in user.
+    /// </summary>
+    /// <returns>A list of projects owned by the current user.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
     {
@@ -27,13 +30,15 @@ public class ProjectsController : ControllerBase
             return Unauthorized("No user is currently logged in.");
         }
 
-        var projects = await _context.Projects
-         .Where(p => p.Owner == username)
-         .ToListAsync();
-
+        var projects = await _projectService.GetProjectsByOwnerAsync(username);
         return Ok(projects);
     }
 
+    /// <summary>
+    /// Creates a new project for the currently logged-in user.
+    /// </summary>
+    /// <param name="project">The project to be created.</param>
+    /// <returns>The created project.</returns>
     [HttpPost]
     public async Task<ActionResult<Project>> CreateProject(Project project)
     {
@@ -43,10 +48,7 @@ public class ProjectsController : ControllerBase
             return Unauthorized("No user is currently logged in.");
         }
 
-        project.Owner = username;
-        _context.Projects.Add(project);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetProjects), new { id = project.Id }, project);
+        var createdProject = await _projectService.CreateProjectAsync(project, username);
+        return CreatedAtAction(nameof(GetProjects), new { id = createdProject.Id }, createdProject);
     }
 }

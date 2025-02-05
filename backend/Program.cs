@@ -102,6 +102,9 @@ builder.Services.Configure<IpRateLimitOptions>(options =>
 });
 builder.Services.AddSingleton<IClientPolicyStore, MemoryCacheClientPolicyStore>();
 
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddHostedService<TokenCleanupService>();
 
 var app = builder.Build();
