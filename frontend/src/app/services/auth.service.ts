@@ -40,7 +40,7 @@ export class AuthService {
     const refreshToken = this.getRefreshToken();
 
     return this._http
-      .post<AuthTokens>(`${this.apiUrl}/refresh`, { refreshToken })
+      .post<AuthTokens>(`${this.apiUrl}/refresh-token`, { refreshToken })
       .pipe(tap((tokens) => this._storeTokens(tokens)));
   }
 
