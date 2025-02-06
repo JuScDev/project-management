@@ -1,5 +1,6 @@
+<h1>My Projects</h1>
 <mat-card class="dashboard-card">
-  <h2>My Projects</h2>
+  <h2>Create Project</h2>
 
   <form (submit)="createProject()">
     <mat-form-field appearance="outline">
@@ -22,7 +23,7 @@
       />
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">
+    <button mat-flat-button color="primary" type="submit">
       Create Project
     </button>
   </form>
@@ -34,11 +35,11 @@
     <h3>{{ project.name }}</h3>
     <p>{{ project.description }}</p>
     <div class="project-actions">
-      <button mat-icon-button color="warn" (click)="deleteProject(project.id)">
-        <mat-icon>delete</mat-icon>
-      </button>
       <button mat-icon-button [routerLink]="['/project-detail', project.id]">
         <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteProject(project.id)">
+        <mat-icon>delete</mat-icon>
       </button>
     </div>
   </mat-card>

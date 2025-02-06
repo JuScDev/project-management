@@ -1,11 +1,11 @@
 @if(navbarOpened){
-<div class="sidenav-backdrop" (click)="handleBackdropClick()"></div>
+<div class="sidenav-backdrop" (click)="closeSidebar()"></div>
 }
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="over" position="end" [(opened)]="navbarOpened">
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">
+      <a mat-list-item routerLink="/dashboard" (click)="closeSidebar()">
         <div class="sidebar-wrapper">
           <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
@@ -30,7 +30,7 @@
       <span class="toolbar-title">Project Management</span>
       <span class="spacer"></span>
       <div class="header-buttons">
-        <a routerLink="/dashboard">
+        <a routerLink="/dashboard" (click)="closeSidebar()">
           <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
         </a>

@@ -17,16 +17,13 @@
       />
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">
-      Save Changes
-    </button>
+    <div class="button-group">
+      <button mat-flat-button (click)="router.navigate(['/dashboard'])">
+        Back
+      </button>
+      <button mat-flat-button color="primary" type="submit">
+        Save Changes
+      </button>
+    </div>
   </form>
-
-  <button
-    mat-stroked-button
-    color="accent"
-    (click)="router.navigate(['/dashboard'])"
-  >
-    Back
-  </button>
 </mat-card>

@@ -1,3 +1,45 @@
 :host {
   display: block;
+  padding: 20px;
+
+  mat-card {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      mat-form-field {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+
+      button[type="submit"] {
+        align-self: center;
+      }
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+
+      button:first-child {
+        background-color: white;
+        color: #3f51b5; /* Primary color */
+        border: 1px solid #3f51b5;
+      }
+    }
+  }
 }

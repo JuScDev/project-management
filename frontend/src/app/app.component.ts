@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   imports: [
-    RouterOutlet,
+    RouterModule,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
@@ -27,7 +27,7 @@ export class AppComponent {
 
   navbarOpened: boolean = false;
 
-  handleBackdropClick() {
+  closeSidebar() {
     this.navbarOpened = false;
   }
 
