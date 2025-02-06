@@ -1,6 +1,6 @@
 <mat-card class="login-container">
-  <h2>Login</h2>
-  <form (submit)="login()">
+  <h2>Register</h2>
+  <form (submit)="register()">
     <mat-form-field appearance="outline">
       <mat-label>Username</mat-label>
       <input
@@ -24,12 +24,9 @@
       />
     </mat-form-field>
 
-    <button mat-flat-button color="primary" type="submit">Login</button>
+    <button mat-flat-button color="primary" type="submit">Register</button>
   </form>
-
-  <a class="go-to-auth" routerLink="/register"
-    >Don't have an account? Register</a
-  >
+  <a class="go-to-auth" routerLink="/login">Already an account? Login</a>
 
   @if(errorMessage()) {
   <p class="error">{{ errorMessage() }}</p>

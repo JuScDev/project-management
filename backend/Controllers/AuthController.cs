@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
     /// <param name="request">The registration request containing the username and password.</param>
     /// <returns>Ok if registration is successful, BadRequest if the username already exists.</returns>
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    public async Task<ActionResult<RegisterResponse>> Register([FromBody] RegisterRequest request)
     {
         var result = await _authService.RegisterAsync(request);
         if (!result)
@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
             return BadRequest("Username already exists");
         }
 
-        return Ok("User created successfully");
+        return Ok(new { success = true, message = "User created successfully" });
     }
 
     /// <summary>

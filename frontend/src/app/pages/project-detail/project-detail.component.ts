@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-project-detail',
@@ -30,6 +31,8 @@ export class ProjectDetailComponent implements OnInit {
 
   public _projectService = inject(ProjectService);
 
+  private _snackBar = inject(MatSnackBar);
+
   public ngOnInit(): void {
     const projectId = Number(this._route.snapshot.paramMap.get('id'));
     this.loadProject(projectId);
@@ -38,7 +41,10 @@ export class ProjectDetailComponent implements OnInit {
   public loadProject(projectId: number): void {
     this._projectService.getProjectById(projectId).subscribe({
       next: (data) => (this.project = data),
-      error: (err) => console.error('Error while loading project:', err),
+      error: (err) =>
+        this._snackBar.open('Error while loading project', 'Close', {
+          duration: 2000,
+        }),
     });
   }
 
@@ -47,7 +53,10 @@ export class ProjectDetailComponent implements OnInit {
       .updateProject(this.project.id, this.project)
       .subscribe({
         next: () => this.router.navigate(['/dashboard']),
-        error: (err) => console.error('Error while updating project:', err),
+        error: (err) =>
+          this._snackBar.open('Error while updating project', 'Close', {
+            duration: 2000,
+          }),
       });
   }
 }

@@ -3,6 +3,7 @@
 }
 
 <mat-sidenav-container class="sidenav-container">
+  @if(authService.getAccessToken()) {
   <mat-sidenav #sidenav mode="over" position="end" [(opened)]="navbarOpened">
     <mat-nav-list>
       <a mat-list-item routerLink="/dashboard" (click)="closeSidebar()">
@@ -11,7 +12,7 @@
           <span>Dashboard</span>
         </div>
       </a>
-      <button mat-list-item (click)="logout()">
+      <button mat-list-item (click)="closeSidebar(); logout()">
         <div class="sidebar-wrapper">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
@@ -24,17 +25,18 @@
       cdkFocusInitial
     />
   </mat-sidenav>
-
+  }
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <span class="toolbar-title">Project Management</span>
+      @if(authService.getAccessToken()) {
       <span class="spacer"></span>
       <div class="header-buttons">
         <a routerLink="/dashboard" (click)="closeSidebar()">
           <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
         </a>
-        <button (click)="logout()">
+        <button (click)="closeSidebar(); logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
         </button>
@@ -46,6 +48,7 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
+      }
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

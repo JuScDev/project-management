@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { AuthTokens } from '../models/auth.models';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { AuthTokens, RegisterResponse } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,23 @@ export class AuthService {
   private apiUrl = 'https://localhost:5001/api/auth';
 
   private _http = inject(HttpClient);
+  public register(username: string, password: string): Observable<boolean> {
+    return this._http
+      .post<RegisterResponse>(`${this.apiUrl}/register`, {
+        username,
+        password,
+      })
+      .pipe(
+        tap((response) => console.log('Register API response:', response)),
+        map((response) => response.success),
+        catchError((error) => {
+          console.error('Register Error:', error);
+          return throwError(
+            () => new Error(error.error?.message || 'Registration failed')
+          );
+        })
+      );
+  }
 
   public login(username: string, password: string): Observable<AuthTokens> {
     return this._http
