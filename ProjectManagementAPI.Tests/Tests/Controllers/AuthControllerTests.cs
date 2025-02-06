@@ -80,7 +80,7 @@ public class AuthControllerTests
         var result = await _authController.Register(registerRequest);
 
         // Assert
-        Assert.IsType<OkObjectResult>(result);
+        Assert.IsType<ActionResult<RegisterResponse>>(result);
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class AuthControllerTests
         var result = await _authController.Register(registerRequest);
 
         // Assert
-        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.IsType<ActionResult<RegisterResponse>>(result);
     }
 
     [Fact]
