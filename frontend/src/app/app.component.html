@@ -1,2 +1,54 @@
-<app-navbar />
-<router-outlet />
+@if(navbarOpened){
+<div class="sidenav-backdrop" (click)="handleBackdropClick()"></div>
+}
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" position="end" [(opened)]="navbarOpened">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard">
+        <div class="sidebar-wrapper">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </div>
+      </a>
+      <button mat-list-item (click)="logout()">
+        <div class="sidebar-wrapper">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </div>
+      </button>
+    </mat-nav-list>
+    <input
+      type="text"
+      style="opacity: 0; height: 0; width: 0; border: none"
+      cdkFocusInitial
+    />
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span class="toolbar-title">Project Management</span>
+      <span class="spacer"></span>
+      <div class="header-buttons">
+        <a routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        <button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </div>
+      <button
+        mat-icon-button
+        class="burger-menu-button"
+        (click)="navbarOpened = true"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<router-outlet></router-outlet>

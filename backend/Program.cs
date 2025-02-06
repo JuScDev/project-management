@@ -149,7 +149,7 @@ app.Use(async (context, next) =>
 // Add X-Frame-Options Header to prevent Clickjacking
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Append("X-Frame-Options", "DENY");  // Keine Frames erlauben
+    context.Response.Headers.Append("X-Frame-Options", "DENY");  // Forbid Frames
     await next.Invoke();
 });
 
@@ -160,7 +160,7 @@ app.Use(async (context, next) =>
     await next.Invoke();
 });
 
-// Rate-Limiting Middleware verwenden
+// Use Rate-Limiting Middleware
 app.UseIpRateLimiting();
 
 app.UseCors(corsPolicy);

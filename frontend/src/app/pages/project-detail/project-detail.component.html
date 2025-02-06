@@ -1,23 +1,32 @@
-<div class="project-detail">
+<mat-card>
   <h2>Edit Project</h2>
 
   <form (submit)="updateProject()">
-    <input
-      type="text"
-      placeholder="project name"
-      [(ngModel)]="project.name"
-      name="name"
-      required
-    />
-    <input
-      type="text"
-      placeholder="description"
-      [(ngModel)]="project.description"
-      name="description"
-      required
-    />
-    <button type="submit">Save Changes</button>
+    <mat-form-field appearance="outline">
+      <mat-label>Project Name</mat-label>
+      <input matInput [(ngModel)]="project.name" name="name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        [(ngModel)]="project.description"
+        name="description"
+        required
+      />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+      Save Changes
+    </button>
   </form>
 
-  <button (click)="router.navigate(['/dashboard'])">Back</button>
-</div>
+  <button
+    mat-stroked-button
+    color="accent"
+    (click)="router.navigate(['/dashboard'])"
+  >
+    Back
+  </button>
+</mat-card>

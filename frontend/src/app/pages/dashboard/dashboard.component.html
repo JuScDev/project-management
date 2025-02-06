@@ -1,31 +1,46 @@
-<div class="dashboard">
-  <h2>My projects</h2>
+<mat-card class="dashboard-card">
+  <h2>My Projects</h2>
 
   <form (submit)="createProject()">
-    <input
-      type="text"
-      placeholder="project name"
-      [(ngModel)]="newProject.name"
-      name="project-name"
-      required
-    />
-    <input
-      type="text"
-      placeholder="description"
-      [(ngModel)]="newProject.description"
-      name="project-description"
-      required
-    />
-    <button type="submit">Create project</button>
-  </form>
+    <mat-form-field appearance="outline">
+      <mat-label>Project Name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newProject.name"
+        name="project-name"
+        required
+      />
+    </mat-form-field>
 
-  <ul>
-    @for(project of projects; track project.id) {
-    <li>
-      <span>{{ project.name }} - {{ project.description }}</span>
-      <button (click)="deleteProject(project.id)">Delete</button>
-      <a [routerLink]="['/project-detail', project.id]">Edit</a>
-    </li>
-    }
-  </ul>
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newProject.description"
+        name="project-description"
+        required
+      />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+      Create Project
+    </button>
+  </form>
+</mat-card>
+
+<div class="project-list">
+  @for(project of projects; track project.id) {
+  <mat-card class="project-item">
+    <h3>{{ project.name }}</h3>
+    <p>{{ project.description }}</p>
+    <div class="project-actions">
+      <button mat-icon-button color="warn" (click)="deleteProject(project.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button [routerLink]="['/project-detail', project.id]">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+  }
 </div>
