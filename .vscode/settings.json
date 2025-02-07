@@ -2,5 +2,11 @@
     "cSpell.words": [
         "ASPNETCORE",
         "Xunit"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#006eff",
+        "titleBar.activeForeground": "#ffffff",
+        "titleBar.inactiveBackground": "#006191",
+        "titleBar.inactiveForeground": "#ffffff"
+    },
 }
